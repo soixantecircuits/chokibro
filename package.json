@@ -1,0 +1,31 @@
+{
+  "name": "chokibro",
+  "version": "0.9.0",
+  "description": "A chockidar spacebro connected client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/soixantecircuits/chokibro.git"
+  },
+  "keywords": [
+    "spacebro",
+    "chokidar",
+    "socket.io",
+    "realtime"
+  ],
+  "author": "soixantecircuits",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/soixantecircuits/chokibro/issues"
+  },
+  "homepage": "https://github.com/soixantecircuits/chokibro#readme",
+  "dependencies": {
+    "chokidar": "^1.4.2",
+    "finalhandler": "^0.4.1",
+    "spacebro-client": "0.0.3"
+  }
+}
