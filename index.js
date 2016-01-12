@@ -6,6 +6,7 @@ var serveStatic = require('serve-static')
 var spacebroClient = require('spacebro-client')
 var chokidar = require('chokidar')
 var pathHelper = require('path')
+var process = require('process')
 var config
 try {
   config = require('./config')
@@ -44,7 +45,11 @@ watcher
     log(`File ${path} has been added`)
     let filepath = getNormalizedFilePath(path)
     let fileURL = 'http://' + ip.address() + ':' + config.server.port + filepath
-    spacebroClient.emit('new-media', {namespace: pathHelper.dirname(filepath).replace('/', ''), src: fileURL})
+    spacebroClient.emit('new-media', {
+      namespace: pathHelper.dirname(filepath).replace('/', ''),
+      src: fileURL,
+      path: pathHelper.resolve(process.cwd(), path)
+    })
   })
   .on('change', path => log(`File ${path} has been changed`))
   .on('unlink', path => log(`File ${path} has been removed`))
