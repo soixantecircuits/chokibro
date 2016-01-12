@@ -6,7 +6,9 @@ var serveStatic = require('serve-static')
 var spacebroClient = require('spacebro-client')
 var chokidar = require('chokidar')
 var pathHelper = require('path')
+var ip = require('ip')
 var process = require('process')
+var mediainfo = require('mediainfo-q')
 var config
 try {
   config = require('./config')
@@ -14,13 +16,13 @@ try {
   config = require('./config.example')
 }
 
+var checkIntegrityTimeout
+
 var watcher = chokidar.watch(config.folder, {
   ignored: /[\/\\]\./,
   persistent: true,
   ignoreInitial: true
 })
-
-var ip = require('ip')
 
 // Serve up public/ftp folder
 var serve = serveStatic(config.folder, { 'index': ['index.html', 'index.htm'] })
@@ -36,6 +38,32 @@ var getNormalizedFilePath = function (filePath) {
   return path
 }
 
+var checkIntegrity = function (path, cb) {
+  clearTimeout(checkIntegrityTimeout)
+  checkIntegrityTimeout = setTimeout(function () {
+    mediainfo(path)
+      .then(function (res) {
+        // console.log(res)
+        if (res[0].duration && res[0].duration.length > 0) {
+          cb()
+        }
+      }).catch(function (err) {
+        console.error(err)
+      })
+  }, 1000)
+}
+
+var send = function (path) {
+  let filepath = getNormalizedFilePath(path)
+  let fileURL = 'http://' + ip.address() + ':' + config.server.port + filepath
+  spacebroClient.emit('new-media', {
+    namespace: pathHelper.dirname(filepath).replace('/', ''),
+    src: fileURL,
+    path: pathHelper.resolve(process.cwd(), path)
+  })
+  log(`File ${path} has been sent`)
+}
+
 spacebroClient.registerToMaster([{name: 'new-media'}], 'chokibro')
 
 var log = console.log.bind(console)
@@ -43,15 +71,22 @@ var log = console.log.bind(console)
 watcher
   .on('add', path => {
     log(`File ${path} has been added`)
-    let filepath = getNormalizedFilePath(path)
-    let fileURL = 'http://' + ip.address() + ':' + config.server.port + filepath
-    spacebroClient.emit('new-media', {
-      namespace: pathHelper.dirname(filepath).replace('/', ''),
-      src: fileURL,
-      path: pathHelper.resolve(process.cwd(), path)
-    })
+    if (pathHelper.extname(path) === '.mp4') {
+      checkIntegrity(path, function () {
+        send(path)
+      })
+    } else {
+      send(path)
+    }
   })
-  .on('change', path => log(`File ${path} has been changed`))
+  .on('change', path => {
+    log(`File ${path} has been changed`)
+    if (pathHelper.extname(path) === '.mp4') {
+      checkIntegrity(path, function () {
+        send(path)
+      })
+    }
+  })
   .on('unlink', path => log(`File ${path} has been removed`))
 
 // More possible events.
