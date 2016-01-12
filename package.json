@@ -28,6 +28,6 @@
     "finalhandler": "^0.4.1",
     "ip": "^1.1.0",
     "serve-static": "^1.10.0",
-    "spacebro-client": "0.0.3"
+    "spacebro-client": "0.0.11"
   }
 }

@@ -6,12 +6,11 @@ var serveStatic = require('serve-static')
 var spacebroClient = require('spacebro-client')
 var chokidar = require('chokidar')
 var pathHelper = require('path')
-
-var config = {
-  folder: '/Users/gabrielstuff/Sources/node/testio/tmp',
-  server: {
-    port: 3030
-  }
+var config
+try {
+  config = require('./config')
+} catch (e) {
+  config = require('./config.example')
 }
 
 var watcher = chokidar.watch(config.folder, {
