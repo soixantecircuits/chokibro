@@ -1,8 +1,8 @@
 var config = {}
 
-config.folder = '/Users/gabrielstuff/Sources/node/testio/tmp'
+config.folder = './'
 config.server = {
-  port: 3030
+  port: 6161
 }
 
 module.exports = config

@@ -19,7 +19,7 @@ try {
 var checkIntegrityTimeout
 
 var watcher = chokidar.watch(config.folder, {
-  ignored: /[\/\\]\./,
+  ignored: /[/\\]\./,
   persistent: true,
   ignoreInitial: true
 })
