@@ -24,11 +24,11 @@
   },
   "homepage": "https://github.com/soixantecircuits/chokibro#readme",
   "dependencies": {
-    "chokidar": "^1.4.2",
-    "finalhandler": "^0.4.1",
-    "ip": "^1.1.0",
+    "chokidar": "1.6.1",
+    "finalhandler": "0.5.1",
+    "ip": "1.1.4",
     "mediainfo-q": "0.0.4",
-    "serve-static": "^1.10.0",
+    "serve-static": "1.11.1",
     "spacebro-client": "0.2.1"
   }
 }
