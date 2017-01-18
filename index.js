@@ -9,12 +9,16 @@ var pathHelper = require('path')
 var ip = require('ip')
 var process = require('process')
 var mediainfo = require('mediainfo-q')
+var finalPort
 var config
 try {
   config = require('./config')
 } catch (e) {
   config = require('./config.example')
 }
+
+var portfinder = require('portfinder')
+portfinder.basePort = config.server.port
 
 var checkIntegrityTimeout
 
@@ -55,7 +59,7 @@ var checkIntegrity = function (path, cb) {
 
 var send = function (path) {
   let filepath = getNormalizedFilePath(path)
-  let fileURL = 'http://' + ip.address() + ':' + config.server.port + filepath
+  let fileURL = 'http://' + ip.address() + ':' + finalPort + filepath
   spacebroClient.emit('new-media', {
     namespace: pathHelper.dirname(filepath).replace('/', ''),
     src: fileURL,
@@ -64,7 +68,8 @@ var send = function (path) {
   log(`File ${path} has been sent`)
 }
 
-spacebroClient.registerToMaster([{name: 'new-media'}], 'chokibro')
+//spacebroClient.registerToMaster([{name: 'new-media'}], 'chokibro')
+spacebroClient.connect({clientName:'chokibro', channelName: config.channelName})
 
 var log = console.log.bind(console)
 // Add event listeners.
@@ -100,4 +105,7 @@ watcher
   })
 
 // Listen
-server.listen(config.server.port)
+portfinder.getPort(function (err, port) {
+  finalPort = port
+  server.listen(finalPort)
+})
