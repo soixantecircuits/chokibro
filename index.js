@@ -12,9 +12,10 @@ var mediainfo = require('mediainfo-q')
 var finalPort
 var config
 try {
-  config = require('./config')
+  config = require('./config/config.json')
 } catch (e) {
-  config = require('./config.example')
+  console.warn('using default config...')
+  config = require('./config/config.example.json')
 }
 
 var portfinder = require('portfinder')
@@ -69,7 +70,7 @@ var send = function (path) {
 }
 
 //spacebroClient.registerToMaster([{name: 'new-media'}], 'chokibro')
-spacebroClient.connect({clientName:'chokibro', channelName: config.channelName})
+spacebroClient.connect({clientName: 'chokibro', channelName: config.spacebro.channelName})
 
 var log = console.log.bind(console)
 // Add event listeners.

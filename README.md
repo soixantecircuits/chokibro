@@ -28,4 +28,4 @@ On OSX, you will :
 
 By default, chokibro is listening for the current folder and expose it over a static file server at the ipv4 available address on the `6161` port.
 
-3. Drag and drop a file into the folder you watch. See how spacebro repor the event.
+3. Drag and drop a file into the folder you watch. See how spacebro report the event.

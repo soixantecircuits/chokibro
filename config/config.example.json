@@ -1,11 +1,11 @@
-var config = {}
-
-config.folder = './'
-config.server = {
-  port: 6161
+{
+  "folder": "./",
+  "server":{
+    "port": 6161
+  },
+  "spacebro": {
+    "address": "tigre.local",
+    "port": 8888,
+    "channelName": "media-stream"
+  }
 }
-config.spacebro.address = 'tigre.local'
-config.spacebro.port = 8888
-config.channelName = 'media-stream'
-
-module.exports = config
