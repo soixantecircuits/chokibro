@@ -69,8 +69,8 @@ var send = function (path) {
   log(`File ${path} has been sent`)
 }
 
-//spacebroClient.registerToMaster([{name: 'new-media'}], 'chokibro')
-spacebroClient.connect({clientName: 'chokibro', channelName: config.spacebro.channelName})
+// spacebroClient.registerToMaster([{name: 'new-media'}], 'chokibro')
+spacebroClient.connect(config.spacebro.address, config.spacebro.port, {clientName: 'chokibro', channelName: config.spacebro.channelName})
 
 var log = console.log.bind(console)
 // Add event listeners.
@@ -109,4 +109,7 @@ watcher
 portfinder.getPort(function (err, port) {
   finalPort = port
   server.listen(finalPort)
+  if (err) {
+    console.error(err)
+  }
 })
