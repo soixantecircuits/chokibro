@@ -93,7 +93,10 @@ watcher
       })
     }
   })
-  .on('unlink', path => log(`File ${path} has been removed`))
+  .on('unlink', path => {
+    log(`File ${path} has been removed`)
+    spacebroClient.emit('unlink-media', { path: path })
+  })
 
 // More possible events.
 watcher
