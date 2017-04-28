@@ -1,6 +1,6 @@
 # Chokibro
 
-Chokidar uses `spacebro` to trigger `new-media` event when a file is discover in a folder he watch.
+Chokidar uses `spacebro` to trigger `new-media` event when a file is discovered in a folder it watches.
 
 Useful to automatically:
   - upload media to a remote service
