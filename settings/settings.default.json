@@ -1,0 +1,11 @@
+{
+  "server":{
+    "port": 6161
+  },
+  "spacebro": {
+    "address": "tigre.local",
+    "port": 8888,
+    "channelName": "media-stream"
+  },
+  "folder": "./"
+}
