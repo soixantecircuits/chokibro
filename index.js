@@ -10,13 +10,8 @@ var ip = require('ip')
 var process = require('process')
 var mediainfo = require('mediainfo-q')
 var finalPort
-var config
-try {
-  config = require('./config/config.json')
-} catch (e) {
-  console.warn('using default config...')
-  config = require('./config/config.example.json')
-}
+var standardSettings = require('standard-settings')
+var config = require('nconf').get()
 
 var portfinder = require('portfinder')
 portfinder.basePort = config.server.port

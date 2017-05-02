@@ -30,7 +30,8 @@
     "mediainfo-q": "0.0.4",
     "portfinder": "^1.0.13",
     "serve-static": "^1.12.2",
-    "spacebro-client": "0.3.0"
+    "spacebro-client": "0.3.0",
+    "standard-settings": "^1.1.0"
   },
   "devDependencies": {
     "standard": "^10.0.2"
