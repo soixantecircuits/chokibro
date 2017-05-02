@@ -69,7 +69,6 @@ var send = function (path) {
   log(`File ${path} has been sent`)
 }
 
-// spacebroClient.registerToMaster([{name: 'new-media'}], 'chokibro')
 spacebroClient.connect(config.spacebro.address, config.spacebro.port, {clientName: 'chokibro', channelName: config.spacebro.channelName})
 
 var log = console.log.bind(console)
