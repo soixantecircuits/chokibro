@@ -11,21 +11,21 @@ var process = require('process')
 var mediainfo = require('mediainfo-q')
 var finalPort
 var standardSettings = require('standard-settings')
-var config = require('nconf').get()
+var settings = require('nconf').get()
 
 var portfinder = require('portfinder')
-portfinder.basePort = config.server.port
+portfinder.basePort = settings.server.port
 
 var checkIntegrityTimeout
 
-var watcher = chokidar.watch(config.folder, {
+var watcher = chokidar.watch(settings.folder, {
   ignored: /[/\\]\./,
   persistent: true,
   ignoreInitial: true
 })
 
 // Serve up public/ftp folder
-var serve = serveStatic(config.folder, { 'index': ['index.html', 'index.htm'] })
+var serve = serveStatic(settings.folder, { 'index': ['index.html', 'index.htm'] })
 
 // Create server
 var server = http.createServer(function (req, res) {
@@ -34,7 +34,7 @@ var server = http.createServer(function (req, res) {
 })
 
 var getNormalizedFilePath = function (filePath) {
-  let path = pathHelper.normalize(pathHelper.sep + filePath.replace(config.folder, ''))
+  let path = pathHelper.normalize(pathHelper.sep + filePath.replace(settings.folder, ''))
   return path
 }
 
@@ -54,9 +54,10 @@ var checkIntegrity = function (path, cb) {
 }
 
 var send = function (path) {
+  let host = settings.server.host || ip.address()
   let filepath = getNormalizedFilePath(path)
-  let fileURL = 'http://' + ip.address() + ':' + finalPort + filepath
-  spacebroClient.emit('new-media', {
+  let fileURL = 'http://' + host + ':' + finalPort + filepath
+  spacebroClient.emit(settings.service.spacebro.outputMessage, {
     namespace: pathHelper.dirname(filepath).replace('/', ''),
     src: fileURL,
     path: pathHelper.resolve(process.cwd(), path)
@@ -64,7 +65,7 @@ var send = function (path) {
   log(`File ${path} has been sent`)
 }
 
-spacebroClient.connect(config.spacebro.address, config.spacebro.port, {clientName: 'chokibro', channelName: config.spacebro.channelName})
+spacebroClient.connect(settings.service.spacebro.address, settings.service.spacebro.port, {clientName: settings.service.spacebro.clientName, channelName: settings.service.spacebro.channelName})
 
 var log = console.log.bind(console)
 // Add event listeners.

@@ -2,10 +2,14 @@
   "server":{
     "port": 6161
   },
-  "spacebro": {
-    "address": "spacebro.space",
-    "port": 3333,
-    "channelName": "media-stream"
+  "service": {
+    "spacebro": {
+      "address": "spacebro.space",
+      "port": 3333,
+      "clientName": "chokibro",
+      "channelName": "media-stream",
+      "outputMessage": "new-media"
+    }
   },
   "folder": "./assets"
 }
