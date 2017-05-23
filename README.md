@@ -46,7 +46,7 @@ The settings follow [standard-settings](https://github.com/soixantecircuits/stan
     "port": 8888,
     "channelName": "media-stream"
   },
-  "folder": "./"
+  "folder": "./assets"
 }
 ```
 
@@ -56,9 +56,9 @@ The settings follow [standard-settings](https://github.com/soixantecircuits/stan
 
 2. Start chokibro: `yarn start`
 
-By default, chokibro is listening for the current folder and exposes it over a static file server at the ipv4 available address on the `6161` port.
+By default, chokibro is listening for the assets folder and exposes it over a static file server at the ipv4 available address on the `6161` port.
 
-3. Drag and drop a file into the folder you watch. See how spacebro reports the event. You can `cp` and `mv` the file as well.
+3. Drag and drop a file into the assets folder. See how spacebro reports the event.
 
 
 ## 📦 Dependencies

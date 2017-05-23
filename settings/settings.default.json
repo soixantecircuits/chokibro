@@ -3,9 +3,9 @@
     "port": 6161
   },
   "spacebro": {
-    "address": "tigre.local",
-    "port": 8888,
+    "address": "spacebro.space",
+    "port": 3333,
     "channelName": "media-stream"
   },
-  "folder": "./"
+  "folder": "./assets"
 }
