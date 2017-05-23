@@ -59,8 +59,10 @@ var send = function (path) {
   let fileURL = 'http://' + host + ':' + finalPort + filepath
   spacebroClient.emit(settings.service.spacebro.outputMessage, {
     namespace: pathHelper.dirname(filepath).replace('/', ''),
-    src: fileURL,
-    path: pathHelper.resolve(process.cwd(), path)
+    src: fileURL, // deprecated
+    url: fileURL,
+    path: pathHelper.resolve(process.cwd(), path),
+    file: pathHelper.basename(path)
   })
   log(`File ${path} has been sent`)
 }
