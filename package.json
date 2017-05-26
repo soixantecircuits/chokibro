@@ -4,7 +4,7 @@
   "description": "A chockidar spacebro connected client",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/standard",
+    "test": "./node_modules/.bin/standard index.js",
     "start": "node index.js"
   },
   "repository": {
@@ -24,14 +24,14 @@
   },
   "homepage": "https://github.com/soixantecircuits/chokibro#readme",
   "dependencies": {
-    "chokidar": "1.6.1",
+    "chokidar": "^1.7.0",
     "finalhandler": "^1.0.2",
     "ip": "^1.1.5",
     "mediainfo-q": "0.0.4",
     "portfinder": "^1.0.13",
     "serve-static": "^1.12.2",
-    "spacebro-client": "0.3.0",
-    "standard-settings": "^1.1.0"
+    "spacebro-client": "^0.3.4",
+    "standard-settings": "1.1.7"
   },
   "devDependencies": {
     "standard": "^10.0.2"
