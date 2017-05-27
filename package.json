@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/standard index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "./node_modules/.bin/nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -34,6 +35,7 @@
     "standard-settings": "1.1.7"
   },
   "devDependencies": {
+    "nodemon": "^1.11.0",
     "standard": "^10.0.2"
   }
 }

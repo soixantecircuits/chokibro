@@ -67,7 +67,23 @@ var send = function (path) {
   log(`File ${path} has been sent`)
 }
 
-spacebroClient.connect(settings.service.spacebro.address, settings.service.spacebro.port, {clientName: settings.service.spacebro.clientName, channelName: settings.service.spacebro.channelName})
+spacebroClient.connect(settings.service.spacebro.address, settings.service.spacebro.port, {
+  clientName: settings.service.spacebro.clientName,
+  channelName: settings.service.spacebro.channelName,
+  verbose: false
+})
+
+spacebroClient.on('connect', () => {
+  console.log(`spacebro: ${settings.service.spacebro.clientName} connected to ${settings.service.spacebro.address}:${settings.service.spacebro.port}#${settings.service.spacebro.channelName}`)
+})
+
+spacebroClient.on('new-member', (data) => {
+  console.log(`spacebro: ${data.member} has joined.`)
+})
+
+spacebroClient.on('disconnect', () => {
+  console.error('spacebro: connection lost.')
+})
 
 var log = console.log.bind(console)
 // Add event listeners.
@@ -100,7 +116,7 @@ watcher
   .on('addDir', path => log(`Directory ${path} has been added`))
   .on('unlinkDir', path => log(`Directory ${path} has been removed`))
   .on('error', error => log(`Watcher error: ${error}`))
-  .on('ready', () => log('Initial scan complete. Ready for changes'))
+  .on('ready', () => log(`Initial scan ${settings.folder} complete. Ready for broadcast change`))
   .on('raw', (event, path, details) => {
     log('Raw event info:', event, path, details)
   })
