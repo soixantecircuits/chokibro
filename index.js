@@ -11,8 +11,7 @@ var process = require('process')
 var mediainfo = require('mediainfo-q')
 var finalPort
 var standardSettings = require('standard-settings')
-var settings = require('nconf').get()
-var commandExists = require('command-exists')
+var settings = standardSettings.getSettings()
 
 var portfinder = require('portfinder')
 portfinder.basePort = settings.server.port
@@ -20,11 +19,11 @@ portfinder.basePort = settings.server.port
 const commandExistsSync = require('command-exists').sync
 let canCheckIntegrity = false
 if (commandExistsSync('mediainfo')) {
-    canCheckIntegrity = true
+  canCheckIntegrity = true
 } else {
-    console.warn('!!!! MISSING COMMAND LINE TOOL !!!!')
-    console.warn('Please install mediainfo. brew install mediainfo, apt-get install mediainfo')
-    console.warn('!!!! ------------------------- !!!!')
+  console.warn('!!!! MISSING COMMAND LINE TOOL !!!!')
+  console.warn('Please install mediainfo. brew install mediainfo, apt-get install mediainfo')
+  console.warn('!!!! ------------------------- !!!!')
 }
 
 var checkIntegrityTimeout
@@ -101,7 +100,7 @@ var log = console.log.bind(console)
 watcher
   .on('add', path => {
     log(`File ${path} has been added`)
-    if ((pathHelper.extname(path) === '.mp4') && (canCheckIntegrity))  {
+    if ((pathHelper.extname(path) === '.mp4') && (canCheckIntegrity)) {
       checkIntegrity(path, function () {
         send(path)
       })
