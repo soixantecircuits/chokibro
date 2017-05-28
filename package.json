@@ -26,6 +26,7 @@
   "homepage": "https://github.com/soixantecircuits/chokibro#readme",
   "dependencies": {
     "chokidar": "^1.7.0",
+    "command-exists": "^1.2.2",
     "finalhandler": "^1.0.2",
     "ip": "^1.1.5",
     "mediainfo-q": "0.0.4",
