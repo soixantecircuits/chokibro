@@ -3,9 +3,13 @@
   "version": "0.9.0",
   "description": "A chockidar spacebro connected client",
   "main": "./src/chokibro.js",
+  "bin": {
+    "chokibro": "./bin/chokibro"
+  },
   "scripts": {
     "test": "./node_modules/.bin/standard ./src/*",
     "start": "node index.js",
+    "bin": "./bin/chokibro",
     "dev": "./node_modules/.bin/nodemon index.js"
   },
   "repository": {
@@ -16,8 +20,12 @@
     "spacebro",
     "chokidar",
     "socket.io",
-    "realtime"
+    "realtime",
+    "watcher"
   ],
+  "engines": {
+    "node": ">=6.10.3"
+  },
   "author": "soixantecircuits",
   "license": "MIT",
   "bugs": {
