@@ -53,5 +53,6 @@ let init = (spacebroConf, port, folder, host) => {
 
 module.exports = {
   init,
-  send
+  send,
+  emit: spacebroClient.emit
 }

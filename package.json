@@ -4,7 +4,7 @@
   "description": "A chockidar spacebro connected client",
   "main": "./src/chokibro.js",
   "scripts": {
-    "test": "./node_modules/.bin/standard index.js",
+    "test": "./node_modules/.bin/standard ./src/*",
     "start": "node index.js",
     "dev": "./node_modules/.bin/nodemon index.js"
   },

@@ -68,7 +68,7 @@ let init = (folder) => {
     })
     .on('unlink', path => {
       log(`File ${path} has been removed`)
-      spacebroClient.emit('unlink-media', { path: path })
+      spacebro.emit('unlink-media', { path: path })
     })
 
   // More possible events.
