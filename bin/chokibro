@@ -1,0 +1,62 @@
+#! /usr/bin/env node
+
+'use strict'
+
+const chokibro = require('../')
+const program = require('commander')
+const pkg = require('../package.json')
+const path = require('path')
+
+function resolveHome(filepath) {
+    if (filepath[0] === '~') {
+        return path.join(process.env.HOME, filepath.slice(1));
+    }
+    return filepath;
+}
+
+program
+  .version(pkg.version)
+  .usage('[options]')
+  .option('-P, --port <n>', 'give a port where chokibro listen')
+  .option('--dir [value]', 'give a path to watch')
+  .option('-s, --broport <n>', 'port for spacebro')
+  .option('-a, --broaddress [value]', 'address of spacebro server')
+  .option('-n, --name [value]', 'the client name of the chokibro instance')
+  .option('--chan [value]', 'channel where you want to listen')
+  .option('-o, --output [value]', 'output message spacebro should emit on a new event')
+  .option('--settings [value]', 'path to the settings.json file')
+
+program.name = 'chokibro'
+
+program.on('-h, --help', function () {
+  console.log('  Examples:')
+  console.log('')
+  console.log('    $ chokibro -P 6767 --dir "./test" -s 6000 -a localhost -c chokibro -o "new-madia"')
+  console.log('    $ chokibro --settings ./settings.json')
+  console.log('')
+})
+
+// init command
+program.parse(process.argv)
+
+const settings = program.settings
+  ? require(path.resolve(process.cwd(), program.settings))
+  : {}
+
+settings.server = {
+  port: Number(program.port) || 6161
+}
+
+settings.folder = path.resolve(resolveHome(program.dir)) || path.resolve(process.cwd())
+
+settings.service = {
+  spacebro:{
+    "address": program.broaddress || "spacebro.space",
+    "port": program.broport || 3333,
+    "clientName": program.name || "chokibro",
+    "channelName": program.chan || "media-stream",
+    "outputMessage": program.output || "new-media"
+  }
+}
+
+chokibro.init(settings)
