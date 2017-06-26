@@ -35,8 +35,15 @@ var checkIntegrity = (path, cb) => {
 
 var log = console.log.bind(console)
 
+var resolveHome = (filepath) => {
+  if (filepath[0] === '~') {
+    return pathHelper.join(process.env.HOME, filepath.slice(1))
+  }
+  return filepath
+}
+
 let init = (folder) => {
-  watchedFolder = folder
+  watchedFolder = resolveHome(folder)
   var watcher = chokidar.watch(watchedFolder, {
     ignored: /[/\\]\./,
     persistent: true,
