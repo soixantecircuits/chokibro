@@ -1,6 +1,6 @@
 {
   "name": "chokibro",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "A chockidar spacebro connected client",
   "main": "./src/chokibro.js",
   "bin": {
