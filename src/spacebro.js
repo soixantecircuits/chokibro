@@ -35,6 +35,7 @@ let init = (spacebroConf, port, folder, host) => {
   spacebroClient.connect(spacebroConfig.address, spacebroConfig.port, {
     clientName: spacebroConfig.clientName,
     channelName: spacebroConfig.channelName,
+    events: spacebroConfig.events,
     verbose: false
   })
 
