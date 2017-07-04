@@ -7,6 +7,8 @@ const commandExistsSync = require('command-exists').sync
 let canCheckIntegrity = false
 let watchedFolder = ''
 var spacebro = require('./spacebro')
+let watcher
+let cb = null
 
 if (commandExistsSync('mediainfo')) {
   canCheckIntegrity = true
@@ -42,9 +44,16 @@ var resolveHome = (filepath) => {
   return filepath
 }
 
-let init = (folder) => {
+let update = (folder) => {
+  watcher.unwatch(watchedFolder)
+  watchedFolder = folder
+  watcher.add(folder)
+}
+
+let init = (folder, callback) => {
+  cb = callback
   watchedFolder = resolveHome(folder)
-  var watcher = chokidar.watch(watchedFolder, {
+  watcher = chokidar.watch(watchedFolder, {
     ignored: /[/\\]\./,
     persistent: true,
     ignoreInitial: true
@@ -83,12 +92,17 @@ let init = (folder) => {
     .on('addDir', path => log(`Directory ${path} has been added`))
     .on('unlinkDir', path => log(`Directory ${path} has been removed`))
     .on('error', error => log(`Watcher error: ${error}`))
-    .on('ready', () => log(`Initial scan ${watchedFolder} complete. Ready for broadcast change`))
+    .on('ready', () => {
+      log(`Scan of ${watchedFolder} complete. Ready for broadcast change`)
+      cb && cb(null)
+    })
     .on('raw', (event, path, details) => {
       log('Raw event info:', event, path, details)
     })
 }
 
 module.exports = {
-  init
+  init,
+  update,
+  watchedFolder
 }
