@@ -14,6 +14,11 @@
 						"eventName": "outMedia",
 						"description": "New media added in folder tracked by chokibro",
 						"type": "all"
+					},
+					"unlinkMedia": {
+						"eventName": "unlink-media",
+						"description": "Media removed in folder tracked by chokibro",
+						"type": "all"
 					}
         }
       },

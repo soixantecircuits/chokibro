@@ -13,11 +13,16 @@ let getNormalizedFilePath = function (filePath) {
   return path
 }
 
-let send = (path) => {
+let send = (path, message) => {
   let host = serverHost || ip.address()
   let filepath = getNormalizedFilePath(path)
   let fileURL = 'http://' + host + ':' + finalPort + filepath
-  spacebroClient.emit(spacebroConfig.client.out.outMedia.eventName, {
+  let event = spacebroConfig.client.out.outMedia.eventName
+  if (message === 'unlink') {
+    event = spacebroConfig.client.out.unlinkMedia.eventName
+  }
+
+  spacebroClient.emit(event, {
     namespace: pathHelper.dirname(filepath).replace('/', ''),
     src: fileURL, // deprecated
     url: fileURL,
