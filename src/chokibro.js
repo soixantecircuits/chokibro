@@ -10,7 +10,7 @@ var finalPort
 const spacebro = require('./spacebro')
 const watcher = require('./watcher')
 
-let init = (settings) => {
+let init = (settings, cb) => {
   portfinder.basePort = settings.server.port
   var serve = serveStatic(settings.folder, { 'index': ['index.html', 'index.htm'] })
 
@@ -19,18 +19,32 @@ let init = (settings) => {
     var done = finalhandler(req, res)
     serve(req, res, done)
   })
+
   portfinder.getPort(function (err, port) {
-    finalPort = port
-    spacebro.init(settings.service.spacebro, port, settings.folder, settings.server.host)
-    watcher.init(settings.folder)
-    server.listen(finalPort)
-    console.log(`Serving file on http://${ip.address()}:${finalPort}`)
     if (err) {
       console.error(err)
+      cb && cb(err)
+    } else {
+      finalPort = port
+      spacebro.init(settings.service.spacebro, port, settings.folder, settings.server.host)
+      server.listen(finalPort)
+      watcher.init(settings.folder, (err) => {
+        if (!err) {
+          cb && cb(null, {port: port})
+        } else {
+          cb && cb(err)
+        }
+      })
+      console.log(`Serving file on http://${ip.address()}:${finalPort}`)
     }
   })
 }
 
+let changeDirectory = (watchedFolder) => {
+  watcher.update(watchedFolder)
+}
+
 module.exports = {
-  init
+  init,
+  changeDirectory
 }
