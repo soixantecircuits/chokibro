@@ -6,9 +6,18 @@
     "spacebro": {
       "address": "spacebro.space",
       "port": 3333,
-      "clientName": "chokibro",
-      "channelName": "media-stream",
-      "outputMessage": "new-media"
+      "client": {
+        "name": "chokibro",
+        "description": "Tool to watch a folder and send new media added in folder",
+				"out": {
+					"outMedia": {
+						"eventName": "outMedia",
+						"description": "New media added in folder tracked by chokibro",
+						"type": "all"
+					}
+        }
+      },
+      "channelName": "media-stream"
     }
   },
   "folder": "./assets"

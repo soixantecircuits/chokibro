@@ -17,7 +17,7 @@ let send = (path) => {
   let host = serverHost || ip.address()
   let filepath = getNormalizedFilePath(path)
   let fileURL = 'http://' + host + ':' + finalPort + filepath
-  spacebroClient.emit(spacebroConfig.outputMessage, {
+  spacebroClient.emit(spacebroConfig.client.out.outMedia.eventName, {
     namespace: pathHelper.dirname(filepath).replace('/', ''),
     src: fileURL, // deprecated
     url: fileURL,
@@ -33,9 +33,8 @@ let init = (spacebroConf, port, folder, host) => {
   serverHost = host
   finalPort = port
   spacebroClient.connect(spacebroConfig.address, spacebroConfig.port, {
-    clientName: spacebroConfig.clientName,
+    client: spacebroConfig.client,
     channelName: spacebroConfig.channelName,
-    events: spacebroConfig.events,
     verbose: false
   })
 
@@ -43,8 +42,8 @@ let init = (spacebroConf, port, folder, host) => {
     console.log(`spacebro: ${spacebroConfig.clientName} connected to ${spacebroConfig.address}:${spacebroConfig.port}#${spacebroConfig.channelName}`)
   })
 
-  spacebroClient.on('new-member', (data) => {
-    console.log(`spacebro: ${data.member} has joined.`)
+  spacebroClient.on('newClient', (data) => {
+    console.log(`spacebro: ${data.name} has joined.`)
   })
 
   spacebroClient.on('disconnect', () => {
