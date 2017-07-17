@@ -3,8 +3,8 @@
 var portfinder = require('portfinder')
 var express = require('express')
 const ip = require('ip')
-var packageInfos = require('../package.json')
-
+const packageInfos = require('../package.json')
+const pathHelper = require('path')
 const spacebro = require('./spacebro')
 const watcher = require('./watcher')
 const stateServe = require('./state-serve')
@@ -12,15 +12,15 @@ const stateServe = require('./state-serve')
 var finalPort
 var app = express()
 
+var resolveHome = (filepath) => {
+  if (filepath[0] === '~') {
+    return pathHelper.join(process.env.HOME, filepath.slice(1))
+  }
+  return filepath
+}
+
 let init = (settings, cb) => {
   portfinder.basePort = process.env.PORT || settings.server.port
-  //var serve = serveStatic(settings.folder, { 'index': ['index.html', 'index.htm'] })
-
-  // Create server
-  /*var server = http.createServer(function (req, res) {
-    var done = finalhandler(req, res)
-    serve(req, res, done)
-  })*/
 
   portfinder.getPort(function (err, port) {
     if (err) {
@@ -29,7 +29,7 @@ let init = (settings, cb) => {
     } else {
       finalPort = port
       spacebro.init(settings.service.spacebro, port, settings.folder, settings.server.host)
-      app.use(express.static(settings.folder))
+      app.use(express.static(resolveHome(settings.folder)))
       stateServe.init(app, {
         app: {
           name: packageInfos.name,
@@ -42,7 +42,6 @@ let init = (settings, cb) => {
       })
 
       app.listen(finalPort)
-      //server.listen(finalPort)
       watcher.init(settings.folder, (err) => {
         if (!err) {
           cb && cb(null, {port: port})
@@ -57,6 +56,7 @@ let init = (settings, cb) => {
 
 let changeDirectory = (watchedFolder) => {
   watcher.update(watchedFolder)
+  app.use(express.static(watchedFolder))
 }
 
 module.exports = {
