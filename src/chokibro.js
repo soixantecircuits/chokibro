@@ -56,7 +56,7 @@ let init = (settings, cb) => {
 
 let changeDirectory = (watchedFolder) => {
   watcher.update(watchedFolder)
-  app.use(express.static(watchedFolder))
+  app.use(express.static(resolveHome(watchedFolder)))
 }
 
 module.exports = {
