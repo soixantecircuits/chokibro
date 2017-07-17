@@ -44,7 +44,7 @@ let init = (spacebroConf, port, folder, host) => {
   })
 
   spacebroClient.on('connect', () => {
-    console.log(`spacebro: ${spacebroConfig.clientName} connected to ${spacebroConfig.address}:${spacebroConfig.port}#${spacebroConfig.channelName}`)
+    console.log(`spacebro: ${spacebroConfig.client.name} connected to ${spacebroConfig.address}:${spacebroConfig.port}#${spacebroConfig.channelName}`)
   })
 
   spacebroClient.on('newClient', (data) => {
