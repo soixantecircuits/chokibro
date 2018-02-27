@@ -4,7 +4,7 @@
   },
   "service": {
     "spacebro": {
-      "address": "spacebro.space",
+      "host": "spacebro.space",
       "port": 3333,
       "client": {
         "name": "chokibro",

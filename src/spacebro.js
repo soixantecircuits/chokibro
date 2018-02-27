@@ -38,14 +38,14 @@ let init = (spacebroConf, port, folder, host) => {
   watchedFolder = folder
   serverHost = host
   finalPort = port
-  spacebroClient.connect(spacebroConfig.address, spacebroConfig.port, {
+  spacebroClient.connect(spacebroConfig.host, spacebroConfig.port, {
     client: spacebroConfig.client,
     channelName: spacebroConfig.channelName,
     verbose: false
   })
 
   spacebroClient.on('connect', () => {
-    console.log(`spacebro: ${spacebroConfig.client.name} connected to ${spacebroConfig.address}:${spacebroConfig.port}#${spacebroConfig.channelName}`)
+    console.log(`spacebro: ${spacebroConfig.client.name} connected to ${spacebroConfig.host}:${spacebroConfig.port}#${spacebroConfig.channelName}`)
   })
 
   spacebroClient.on('newClient', (data) => {
