@@ -3,13 +3,14 @@
 const ip = require('ip')
 const spacebroClient = require('spacebro-client')
 const pathHelper = require('path')
+var globParent = require('glob-parent')
 let finalPort = null
 let watchedFolder = ''
 let serverHost = ''
 let log = console.log.bind(console)
 let spacebroConfig = {}
 let getNormalizedFilePath = function (filePath) {
-  let path = pathHelper.normalize(pathHelper.sep + filePath.replace(watchedFolder, ''))
+  let path = pathHelper.normalize(pathHelper.sep + filePath.replace(globParent(watchedFolder), ''))
   return path
 }
 

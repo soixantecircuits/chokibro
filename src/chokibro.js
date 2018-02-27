@@ -8,6 +8,7 @@ const pathHelper = require('path')
 const spacebro = require('./spacebro')
 const watcher = require('./watcher')
 const stateServe = require('./state-serve')
+var globParent = require('glob-parent')
 
 var finalPort
 var app = express()
@@ -29,7 +30,7 @@ let init = (settings, cb) => {
     } else {
       finalPort = port
       spacebro.init(settings.service.spacebro, port, settings.folder, settings.server.host)
-      app.use(express.static(resolveHome(settings.folder)))
+      app.use(express.static(globParent(resolveHome(settings.folder))))
       stateServe.init(app, {
         app: {
           name: packageInfos.name,
