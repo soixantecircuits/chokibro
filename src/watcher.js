@@ -49,6 +49,9 @@ let update = (folder) => {
   watchedFolder = folder
   watcher.add(folder)
 }
+let isVideo = (path) => {
+  return pathHelper.extname(path) === '.mp4' || pathHelper.extname(path) === '.MP4'
+}
 
 let init = (folder, callback) => {
   cb = callback
@@ -62,7 +65,7 @@ let init = (folder, callback) => {
   watcher
     .on('add', path => {
       log(`File ${path} has been added`)
-      if ((pathHelper.extname(path) === '.mp4') && (canCheckIntegrity)) {
+      if (isVideo(path) && (canCheckIntegrity)) {
         checkIntegrity(path, function () {
           spacebro.send(path)
         })
@@ -73,7 +76,7 @@ let init = (folder, callback) => {
     })
     .on('change', path => {
       log(`File ${path} has been changed`)
-      if ((pathHelper.extname(path) === '.mp4') && (canCheckIntegrity)) {
+      if (isVideo(path) && (canCheckIntegrity)) {
         checkIntegrity(path, function () {
           spacebro.send(path)
         })
