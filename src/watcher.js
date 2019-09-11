@@ -59,7 +59,11 @@ let init = (folder, callback) => {
   watcher = chokidar.watch(watchedFolder, {
     ignored: /[/\\]\./,
     persistent: true,
-    ignoreInitial: true
+    ignoreInitial: true,
+    awaitWriteFinish: {
+      stabilityThreshold: 2000,
+      pollInterval: 100
+    }
   })
 
   watcher
