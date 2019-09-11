@@ -44,16 +44,16 @@ var resolveHome = (filepath) => {
   return filepath
 }
 
-let update = (folder) => {
+const update = (folder) => {
   watcher.unwatch(watchedFolder)
   watchedFolder = folder
   watcher.add(folder)
 }
-let isVideo = (path) => {
+const isVideo = (path) => {
   return pathHelper.extname(path) === '.mp4' || pathHelper.extname(path) === '.MP4'
 }
 
-let init = (folder, callback) => {
+const init = (folder, callback) => {
   cb = callback
   watchedFolder = resolveHome(folder)
   watcher = chokidar.watch(watchedFolder, {

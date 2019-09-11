@@ -20,7 +20,7 @@ var resolveHome = (filepath) => {
   return filepath
 }
 
-let init = (settings, cb) => {
+const init = (settings, cb) => {
   portfinder.basePort = process.env.PORT || settings.server.port
 
   portfinder.getPort(function (err, port) {
@@ -45,7 +45,7 @@ let init = (settings, cb) => {
       app.listen(finalPort)
       watcher.init(settings.folder, (err) => {
         if (!err) {
-          cb && cb(null, {port: port})
+          cb && cb(null, { port: port })
         } else {
           cb && cb(err)
         }
@@ -55,7 +55,7 @@ let init = (settings, cb) => {
   })
 }
 
-let changeDirectory = (watchedFolder) => {
+const changeDirectory = (watchedFolder) => {
   watcher.update(watchedFolder)
   app.use(express.static(resolveHome(watchedFolder)))
 }

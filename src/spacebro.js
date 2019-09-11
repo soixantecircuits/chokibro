@@ -7,17 +7,17 @@ var globParent = require('glob-parent')
 let finalPort = null
 let watchedFolder = ''
 let serverHost = ''
-let log = console.log.bind(console)
+const log = console.log.bind(console)
 let spacebroConfig = {}
-let getNormalizedFilePath = function (filePath) {
-  let path = pathHelper.normalize(pathHelper.sep + filePath.replace(globParent(watchedFolder), ''))
+const getNormalizedFilePath = function (filePath) {
+  const path = pathHelper.normalize(pathHelper.sep + filePath.replace(globParent(watchedFolder), ''))
   return path
 }
 
-let send = (path, message) => {
-  let host = serverHost || ip.address()
-  let filepath = getNormalizedFilePath(path)
-  let fileURL = 'http://' + host + ':' + finalPort + filepath
+const send = (path, message) => {
+  const host = serverHost || ip.address()
+  const filepath = getNormalizedFilePath(path)
+  const fileURL = 'http://' + host + ':' + finalPort + filepath
   let event = spacebroConfig.client.out.outMedia.eventName
   if (message === 'unlink') {
     event = spacebroConfig.client.out.unlinkMedia.eventName
@@ -33,7 +33,7 @@ let send = (path, message) => {
   log(`File ${path} has been sent`)
 }
 
-let init = (spacebroConf, port, folder, host) => {
+const init = (spacebroConf, port, folder, host) => {
   spacebroConfig = spacebroConf
   watchedFolder = folder
   serverHost = host
