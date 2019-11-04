@@ -9,16 +9,10 @@ const spacebro = require('./spacebro')
 const watcher = require('./watcher')
 const stateServe = require('./state-serve')
 var globParent = require('glob-parent')
+const untildify = require('untildify')
 
 var finalPort
 var app = express()
-
-var resolveHome = (filepath) => {
-  if (filepath[0] === '~') {
-    return pathHelper.join(process.env.HOME, filepath.slice(1))
-  }
-  return filepath
-}
 
 const init = (settings, cb) => {
   portfinder.basePort = process.env.PORT || settings.server.port
@@ -30,7 +24,7 @@ const init = (settings, cb) => {
     } else {
       finalPort = port
       spacebro.init(settings.service.spacebro, port, settings.folder, settings.server.host)
-      app.use(express.static(globParent(resolveHome(settings.folder))))
+      app.use(express.static(globParent(untildify(settings.folder))))
       stateServe.init(app, {
         app: {
           name: packageInfos.name,
@@ -43,7 +37,7 @@ const init = (settings, cb) => {
       })
 
       app.listen(finalPort)
-      watcher.init(settings.folder, (err) => {
+      watcher.init(settings, (err) => {
         if (!err) {
           cb && cb(null, { port: port })
         } else {

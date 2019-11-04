@@ -6,13 +6,7 @@ const chokibro = require('../')
 const program = require('commander')
 const pkg = require('../package.json')
 const path = require('path')
-
-function resolveHome(filepath) {
-    if (filepath[0] === '~') {
-        return path.join(process.env.HOME, filepath.slice(1));
-    }
-    return filepath;
-}
+const untildify = require('untildify')
 
 program
   .version(pkg.version)
@@ -47,7 +41,7 @@ settings.server = {
   port: Number(program.port) || 6161
 }
 
-settings.folder = path.resolve(resolveHome(program.dir)) || path.resolve(process.cwd())
+settings.folder = path.resolve(untildify(program.dir)) || path.resolve(process.cwd())
 
 settings.service = {
   spacebro:{

@@ -10,7 +10,9 @@
     "test": "./node_modules/.bin/standard src/**/*.js",
     "start": "node index.js",
     "bin": "./bin/chokibro",
-    "dev": "./node_modules/.bin/nodemon index.js"
+    "dev": "./node_modules/.bin/nodemon index.js",
+    "pack:macos": "pkg . -t node8-macos-x64",
+    "pack:win64": "pkg . -t node8-win-x64"
   },
   "repository": {
     "type": "git",
@@ -33,17 +35,21 @@
   },
   "homepage": "https://github.com/soixantecircuits/chokibro#readme",
   "dependencies": {
+    "@ffprobe-installer/ffprobe": "^1.0.12",
     "chokidar": "3.0.2",
     "command-exists": "^1.2.8",
     "commander": "^3.0.1",
     "express": "^4.17.1",
     "finalhandler": "^1.1.2",
     "ip": "^1.1.5",
-    "mediainfo-q": "0.0.4",
+    "mime-types": "^2.1.24",
+    "node-ffprobe": "github:ListenerApproved/node-ffprobe",
+    "node-mediainfo": "^1.0.3",
     "portfinder": "^1.0.24",
     "serve-static": "^1.14.1",
     "spacebro-client": "^0.4.8",
-    "standard-settings": "^1.1.15"
+    "standard-settings": "2.0.1",
+    "untildify": "^4.0.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.2",

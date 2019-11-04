@@ -2,60 +2,62 @@
 
 const chokidar = require('chokidar')
 const pathHelper = require('path')
-const mediainfo = require('mediainfo-q')
-const commandExistsSync = require('command-exists').sync
-let canCheckIntegrity = false
+//const mediainfo = require('mediainfo-q')
+const ffprobe = require('node-ffprobe')
+const ffprobeInstaller = require('@ffprobe-installer/ffprobe')
+ffprobe.FFPROBE_PATH = ffprobeInstaller.path
+ffprobe.SYNC = true
+const untildify = require('untildify')
+const mime = require('mime-types')
 let watchedFolder = ''
+let shouldCheckIntegrity = false
 var spacebro = require('./spacebro')
 let watcher
 let cb = null
 
-if (commandExistsSync('mediainfo')) {
-  canCheckIntegrity = true
-} else {
-  console.warn('!!!! MISSING COMMAND LINE TOOL !!!!')
-  console.warn('Please install mediainfo. brew install mediainfo, apt-get install mediainfo')
-  console.warn('!!!! ------------------------- !!!!')
-}
-
-var checkIntegrityTimeout = null
-
-var checkIntegrity = (path, cb) => {
-  clearTimeout(checkIntegrityTimeout)
-  checkIntegrityTimeout = setTimeout(function () {
-    mediainfo(path)
-      .then(function (res) {
-        // console.log(res)
-        if (res[0].duration && res[0].duration.length > 0) {
-          cb()
-        }
-      }).catch(function (err) {
-        console.error(err)
-      })
-  }, 1000)
+const checkIntegrityAsync = async path => {
+  try {
+    const result = await ffprobe(path)
+    // console.log(result)
+    if (isVideo(path) && result.streams && result.streams.length > 0 && result.format.duration && Number(result.format.duration) > 0) {
+      return true
+    } else if (isImage(path)) {
+      return result.format.nb_streams > 0
+    } else if (isSound(path) && result.streams && result.streams.length > 0 && result.format.duration && Number(result.format.duration) > 0) {
+      return true
+    } else {
+      console.warn('looks like it is not a media or it is corrupted')
+      return false
+    }
+  } catch (err) {
+    console.error(err)
+    return false
+  }
 }
 
 var log = console.log.bind(console)
 
-var resolveHome = (filepath) => {
-  if (filepath[0] === '~') {
-    return pathHelper.join(process.env.HOME, filepath.slice(1))
-  }
-  return filepath
-}
-
-const update = (folder) => {
+const update = folder => {
   watcher.unwatch(watchedFolder)
   watchedFolder = folder
   watcher.add(folder)
 }
-const isVideo = (path) => {
-  return pathHelper.extname(path) === '.mp4' || pathHelper.extname(path) === '.MP4'
+const isVideo = path => {
+  return mime.lookup(path) && mime.lookup(path).indexOf('video') > -1
 }
 
-const init = (folder, callback) => {
+const isImage = path => {
+  return mime.lookup(path) && mime.lookup(path).indexOf('image') > -1
+}
+
+const isSound = path => {
+  return mime.lookup(path) && mime.lookup(path).indexOf('audio') > -1
+}
+
+const init = (settings, callback) => {
   cb = callback
-  watchedFolder = resolveHome(folder)
+  watchedFolder = untildify(settings.folder)
+  shouldCheckIntegrity = settings.checkIntegrity
   watcher = chokidar.watch(watchedFolder, {
     ignored: /[/\\]\./,
     persistent: true,
@@ -67,23 +69,29 @@ const init = (folder, callback) => {
   })
 
   watcher
-    .on('add', path => {
+    .on('add', async path => {
       log(`File ${path} has been added`)
-      if (isVideo(path) && (canCheckIntegrity)) {
-        checkIntegrity(path, function () {
+      if (shouldCheckIntegrity) {
+        let integrity = await checkIntegrityAsync(path)
+        if (integrity === true) {
           spacebro.send(path)
-        })
+        } else {
+          console.error('file is not ok')
+        }
       } else {
         console.warn('No integrity file check')
         spacebro.send(path)
       }
     })
-    .on('change', path => {
+    .on('change', async path => {
       log(`File ${path} has been changed`)
-      if (isVideo(path) && (canCheckIntegrity)) {
-        checkIntegrity(path, function () {
+      if (shouldCheckIntegrity) {
+        let integrity = await checkIntegrityAsync(path)
+        if (integrity === true) {
           spacebro.send(path)
-        })
+        } else {
+          console.error('file is not ok')
+        }
       } else {
         console.warn('No integrity file check')
         spacebro.send(path)
