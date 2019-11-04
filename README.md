@@ -20,17 +20,9 @@ It emits a message which looks like this:
 
 ## 🌍 Installation
 
-On Linux, you'll need to :
+Since, we remove mediaInfo in favor of ffprobe, you should be able to use the package as is. We use @ffprobe-installer/ffprobe to install ffprobe with the correct binary. If you encounter some difficulies, make sure ffmpeg is installed.
 
-```
-sudo apt-get install avahi-daemon avahi-discover libnss-mdns libavahi-compat-libdnssd-dev curl build-essential mediainfo
-```
-
-On OSX, you will :
-
-`brew install mediainfo`
-
-Then you can `yarn`.
+Use `npm i` to install dependencies.
 
 ## ⚙ Configuration
 
@@ -39,14 +31,33 @@ The settings follow [standard-settings](https://github.com/soixantecircuits/stan
 ```
 {
   "server":{
-    "port": 6161
+    "port": 36400
   },
-  "spacebro": {
-    "address": "tigre.local",
-    "port": 8888,
-    "channelName": "media-stream"
+  "service": {
+    "spacebro": {
+      "host": "spacebro.space",
+      "port": 3333,
+      "client": {
+        "name": "chokibro",
+        "description": "Tool to watch a folder and send new media added in folder",
+				"out": {
+					"outMedia": {
+						"eventName": "outMedia",
+						"description": "New media added in folder tracked by chokibro",
+						"type": "all"
+					},
+					"unlinkMedia": {
+						"eventName": "unlink-media",
+						"description": "Media removed in folder tracked by chokibro",
+						"type": "all"
+					}
+        }
+      },
+      "channelName": "info-stream"
+    }
   },
-  "folder": "./assets"
+  "folder": "./assets",
+  "checkIntegrity": false,
 }
 ```
 
@@ -54,7 +65,7 @@ The settings follow [standard-settings](https://github.com/soixantecircuits/stan
 
 1. Start spacebro in a terminal window: `spacebro`
 
-2. Start chokibro: `yarn start`
+2. Start chokibro: `npm run start`
 
 By default, chokibro is listening for the assets folder and exposes it over a static file server at the ipv4 available address on the `6161` port.
 
@@ -66,7 +77,7 @@ By default, chokibro is listening for the assets folder and exposes it over a st
 - chokidar
 - finalhandler
 - ip
-- mediainfo-q
+- ffprobe
 - portfinder
 - serve-static
 - spacebro-client
