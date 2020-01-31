@@ -23,8 +23,10 @@ const init = (settings, cb) => {
       cb && cb(err)
     } else {
       finalPort = port
+      let folderPath = globParent(untildify(settings.folder))
+      console.log(folderPath)
       spacebro.init(settings.service.spacebro, port, settings.folder, settings.server.host)
-      app.use(express.static(globParent(untildify(settings.folder))))
+      app.use('/static', express.static(folderPath))
       stateServe.init(app, {
         app: {
           name: packageInfos.name,

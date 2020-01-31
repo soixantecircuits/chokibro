@@ -5,6 +5,7 @@
   "checkIntegrity": false,
   "service": {
     "spacebro": {
+      "channelName": "media-stream",
       "host": "spacebro.space",
       "port": 3333,
       "client": {
@@ -22,9 +23,8 @@
 						"type": "all"
 					}
         }
-      },
-      "channelName": "info-stream"
+      }
     }
   },
-  "folder": "~/tmp"
+  "folder": "~/tmp/walls-io"
 }

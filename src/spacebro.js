@@ -4,13 +4,15 @@ const ip = require('ip')
 const spacebroClient = require('spacebro-client')
 const pathHelper = require('path')
 var globParent = require('glob-parent')
+const untildify = require('untildify')
 let finalPort = null
 let watchedFolder = ''
 let serverHost = ''
 const log = console.log.bind(console)
 let spacebroConfig = {}
 const getNormalizedFilePath = function (filePath) {
-  const path = pathHelper.normalize(pathHelper.sep + filePath.replace(globParent(watchedFolder), ''))
+  let pathCompound = pathHelper.sep + 'static' + pathHelper.sep + filePath.replace(untildify(globParent(watchedFolder)), '')
+  const path = pathHelper.normalize(pathCompound)
   return path
 }
 
@@ -31,6 +33,7 @@ const send = (path, message) => {
     file: pathHelper.basename(path)
   })
   log(`File ${path} has been sent`)
+  log(`Url ${fileURL} has been sent`)
 }
 
 const init = (spacebroConf, port, folder, host) => {
