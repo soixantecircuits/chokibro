@@ -35,7 +35,7 @@
   },
   "homepage": "https://github.com/soixantecircuits/chokibro#readme",
   "dependencies": {
-    "@ffprobe-installer/ffprobe": "^1.0.12",
+    "@ffprobe-installer/ffprobe": "soixantecircuits/node-ffprobe-installer",
     "chokidar": "3.0.2",
     "command-exists": "^1.2.8",
     "commander": "^3.0.1",
