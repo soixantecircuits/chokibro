@@ -5,6 +5,8 @@ const pathHelper = require('path')
 //const mediainfo = require('mediainfo-q')
 const ffprobe = require('node-ffprobe')
 const ffprobeInstaller = require('@ffprobe-installer/ffprobe')
+const FileType = require('file-type')
+const fs = require('fs')
 ffprobe.FFPROBE_PATH = ffprobeInstaller.path
 ffprobe.SYNC = true
 const untildify = require('untildify')
@@ -15,18 +17,16 @@ var spacebro = require('./spacebro')
 let watcher
 let cb = null
 
-const checkIntegrityAsync = async path => {
+const checkMediaIntegrityAsync = async path => {
   try {
     const result = await ffprobe(path)
     // console.log(result)
     if (isVideo(path) && result.streams && result.streams.length > 0 && result.format.duration && Number(result.format.duration) > 0) {
       return true
-    } else if (isImage(path)) {
-      return result.format.nb_streams > 0
     } else if (isSound(path) && result.streams && result.streams.length > 0 && result.format.duration && Number(result.format.duration) > 0) {
       return true
     } else {
-      console.warn('looks like it is not a media or it is corrupted')
+      console.warn('looks like it is not a video or sound media or it is corrupted.')
       return false
     }
   } catch (err) {
@@ -34,6 +34,18 @@ const checkIntegrityAsync = async path => {
     return false
   }
 }
+
+const checkImageIntegrity = async path => {
+  const stream = fs.createReadStream(path)
+  try {
+    const {ext, mime} = await FileType.fromStream(stream)
+    return {ext, mime}
+  } catch (err) {
+    return null
+  }
+}
+
+
 
 var log = console.log.bind(console)
 
@@ -72,11 +84,20 @@ const init = (settings, callback) => {
     .on('add', async path => {
       log(`File ${path} has been added`)
       if (shouldCheckIntegrity) {
-        let integrity = await checkIntegrityAsync(path)
-        if (integrity === true) {
-          spacebro.send(path)
+        if (!isImage(path)) {
+          let integrity = await checkMediaIntegrityAsync(path)
+          if (integrity === true) {
+            spacebro.send(path)
+          } else {
+            console.error(`file ${path} is not ok`)
+          }
         } else {
-          console.error('file is not ok')
+          let res = await checkImageIntegrity(path)
+          if (res) {
+            spacebro.send(path)
+          } else {
+            console.error(`file ${path} is not ok`)
+          }
         }
       } else {
         console.warn('No integrity file check')
@@ -86,11 +107,20 @@ const init = (settings, callback) => {
     .on('change', async path => {
       log(`File ${path} has been changed`)
       if (shouldCheckIntegrity) {
-        let integrity = await checkIntegrityAsync(path)
-        if (integrity === true) {
-          spacebro.send(path)
+        if (!isImage(path)) {
+          let integrity = await checkMediaIntegrityAsync(path)
+          if (integrity === true) {
+            spacebro.send(path)
+          } else {
+            console.error(`file ${path} is not ok`)
+          }
         } else {
-          console.error('file is not ok')
+          let res = await checkImageIntegrity(path)
+          if (res) {
+            spacebro.send(path)
+          } else {
+            console.error(`file ${path} is not ok`)
+          }
         }
       } else {
         console.warn('No integrity file check')
