@@ -40,7 +40,7 @@
     "command-exists": "^1.2.8",
     "commander": "^3.0.1",
     "express": "^4.17.1",
-    "file-type": "^14.0.0",
+    "file-type": "^16.5.4",
     "finalhandler": "^1.1.2",
     "ip": "^1.1.5",
     "mime-types": "^2.1.24",
